@@ -15,6 +15,9 @@ class IRModel(metaclass=ABCMeta):
     b(t: float) -> float
         b(Y)
 
+    Y0() -> float
+        Starting point for chain.
+
     calibrate(data: pd.DataFrame)
         Abstract method to calibrate the model using the provided data.
     """
@@ -25,6 +28,10 @@ class IRModel(metaclass=ABCMeta):
 
     @abstractmethod
     def b(self, Y_prev: float) -> float:
+        pass
+
+    @abstractmethod
+    def Y0(self) -> float:
         pass
 
     @abstractmethod

@@ -30,7 +30,7 @@ class SDESolver(metaclass=ABCMeta):
             Runs the solver for the specified number of chains and time steps, returning the results as a NumPy array.
     """
 
-    def __init__(self, t_start: int, t_stop: int, N: int, num_chains: int, num_workers: int = 1):
+    def __init__(self, t_start: int, t_stop: int, N: int, num_chains: int, num_workers: int = 1, Y0: float = 0.0):
         """
         Initializes the SolverBase with the given parameters.
 
@@ -40,10 +40,12 @@ class SDESolver(metaclass=ABCMeta):
             N (int): Number of time steps.
             num_chains (int): Number of independent chains to simulate.
             num_workers (int): Number of worker threads to use for parallel execution (default is 1).
+            Y0 (float): starting point for chain.
         """
 
         self.N = N
         self.num_chains = num_chains
+        self.Y0 = 0
         self.dt = (t_stop-t_start)/N
         self.num_workers = num_workers
         self.dW = lambda _ : np.random.normal(loc=0.0, scale=np.sqrt(self.dt))
@@ -80,7 +82,7 @@ class SDESolver(metaclass=ABCMeta):
 
             N = self.N
             Y = np.zeros(N)
-            Y[0] = 0
+            Y[0] = self.Y0
             for i in tqdm(range(1, N), desc=f"Chain {i}"):
                 Y[i] = self.step(Y[i-1])
             return Y
