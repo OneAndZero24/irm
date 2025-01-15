@@ -1,5 +1,6 @@
 import numpy as np
 import numpy.typing as npt
+import sympy as sym
 
 from .solver_base import SolverBase, SDEFn
 
@@ -23,11 +24,12 @@ class Milstein(SolverBase):
             Perform a single Milstein step.
     """
 
-    def __init__(self, a: SDEFn, b: SDEFn, b_prime: SDEFn, t_start: int, t_stop: int, N: int, num_chains: int, num_workers: int = 1):
+    def __init__(self, a: SDEFn, b: SDEFn, t_start: int, t_stop: int, N: int, num_chains: int, num_workers: int = 1):
         super().__init__(t_start, t_stop, N, num_chains, num_workers)
         self.a = a
         self.b = b
-        self.b_prime = b_prime
+        t = sym.symbols('t')
+        self.b_prime = sym.lambdify(t, sym.diff(self.b(t), t), "numpy")
 
     def step(self, Y_prev: float) -> npt.NDArray[np.float64]:
         dt = self.dt

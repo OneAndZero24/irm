@@ -1,6 +1,8 @@
 from typing import Callable, TypeAlias
 from abc import ABCMeta, abstractmethod
-from multiprocessing import get_context
+
+from pathos.multiprocessing import ProcessPool as Pool
+import dill
 
 import numpy as np
 import numpy.typing as npt
@@ -44,6 +46,10 @@ class SolverBase(metaclass=ABCMeta):
         self.num_chains = num_chains
         self.dt = (t_stop-t_start)/N
         self.num_workers = num_workers
+        self.dW = lambda _ : np.random.normal(loc=0.0, scale=np.sqrt(self.dt))
+
+        # Serializer settings
+        dill.settings['recurse'] = True
 
     @abstractmethod
     def step(self, Y_prev: float) -> npt.NDArray[np.float64]:
@@ -59,33 +65,6 @@ class SolverBase(metaclass=ABCMeta):
 
         pass
 
-    def dW(self, dt: float) -> float:
-        """
-        Generate a random sample from a normal distribution with mean 0 and standard deviation sqrt(dt).
-
-        Returns:
-            float: A random sample from the normal distribution.
-        """
-        
-        return np.random.normal(loc=0.0, scale=np.sqrt(self.dt))
-
-    def chain(self, i: int) -> npt.NDArray[np.float64]:
-        """
-        Generates a chain of values using the step function.
-
-        Parameters:
-            i (int): An integer used in the tqdm description for progress tracking.
-        Returns:
-            npt.NDArray[np.float64]: A NumPy array of float64 values representing the generated chain.
-        """
-
-        N = self.N
-        Y = np.zeros(N)
-        Y[0] = 0
-        for i in tqdm(range(1, N), desc=f"Chain {i}"):
-            Y[i] = self.step(Y[i-1])
-        return Y
-
     def run(self) -> npt.NDArray[np.float64]:
         """
         Runs the solver for the specified number of chains and time steps.
@@ -94,10 +73,23 @@ class SolverBase(metaclass=ABCMeta):
             npt.NDArray[np.float64]: A NumPy array containing the results of the simulation for each chain on axis=0.
         """
         
+        def chain(i: int) -> npt.NDArray[np.float64]:
+            # For multiprocessing
+            rng = np.random.default_rng(seed=i)
+            self.dW = lambda _ : rng.normal(loc=0.0, scale=np.sqrt(self.dt))
+
+            N = self.N
+            Y = np.zeros(N)
+            Y[0] = 0
+            for i in tqdm(range(1, N), desc=f"Chain {i}"):
+                Y[i] = self.step(Y[i-1])
+            return Y
+        
         chains = range(1, self.num_chains+1)
-        if self.num_workers> 1:
-            with get_context("fork").Pool(self.num_workers) as pool:
-                Ys = list(pool.map(self.chain, chains))
+        if self.num_workers > 1:
+
+            with Pool(self.num_workers) as pool:
+                Ys = pool.map(chain, chains)
         else:
-            Ys = [self.chain(i) for i in chains]
+            Ys = [chain(i) for i in chains]
         return np.stack(Ys)
