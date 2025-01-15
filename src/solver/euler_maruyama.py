@@ -1,7 +1,7 @@
 import numpy as np
 import numpy.typing as npt
 
-from .solver_abc import SolverBase, SDEFn
+from .solver_base import SolverBase, SDEFn
 
 
 class EulerMaruyama(SolverBase):
