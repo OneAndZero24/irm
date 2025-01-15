@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 SDEFn: TypeAlias = Callable[[float], float]
 
-class SolverBase(metaclass=ABCMeta):
+class SDESolver(metaclass=ABCMeta):
     """
     Abstract base class for a solver that simulates SDEs.
 

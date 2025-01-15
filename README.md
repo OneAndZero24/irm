@@ -4,14 +4,17 @@
 Flexible playground for instrument rate model simulations and visualizations. 📈
 
 ## Features
-| Solvers |   |
-| ------ | - |
+- Hydra-based configurability
+- Multiprocessed chain sampling
+
+| Solver | Status |
+| ------ | -- |
 | Euler-Maruyama | ✅ |
 | Milstein | ✅ |
 
-| Models |   |
-| ----- | - |
-| Vasicek | ❌ |
+| Model | Status |
+| ----- | -- |
+| Vasicek | ✅ |
 | CIR | ❌ |
 | RB | ❌ |
 | Ho-Lee | ❌ |

@@ -2,10 +2,10 @@ import numpy as np
 import numpy.typing as npt
 import sympy as sym
 
-from .solver_base import SolverBase, SDEFn
+from .sde_solver import SDESolver, SDEFn
 
 
-class Milstein(SolverBase):
+class Milstein(SDESolver):
     """
     Milstein method for solving Stochastic Differential Equations (SDEs).
 

@@ -1,10 +1,10 @@
 import numpy as np
 import numpy.typing as npt
 
-from .solver_base import SolverBase, SDEFn
+from .sde_solver import SDESolver, SDEFn
 
 
-class EulerMaruyama(SolverBase):
+class EulerMaruyama(SDESolver):
     """
     Euler-Maruyama method for solving stochastic differential equations (SDEs).
     This class implements the Euler-Maruyama method, which is a numerical method
