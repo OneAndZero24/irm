@@ -34,8 +34,8 @@ def plot_sim(Ys: list[np.ndarray], y: typing.Optional[np.ndarray], x: np.ndarray
     for Y in Ys:
         plt.plot(x, Y, alpha=0.4)
 
-    upper_bound = np.max(Ys, axis=0)
-    lower_bound = np.min(Ys, axis=0)
+    upper_bound = np.quantile(Ys, q=0.95, axis=0)
+    lower_bound = np.quantile(Ys, q=0.05, axis=0)
     average_line = np.mean(Ys, axis=0)
     plt.plot(x, upper_bound, 'k--', label="Upper Bound")
     plt.plot(x, lower_bound, 'k--', label="Lower Bound")
