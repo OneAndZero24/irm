@@ -7,3 +7,4 @@ defaults:
 sim:
   bond: 240
   save_plots: True
+  forecast: 6/8/2024

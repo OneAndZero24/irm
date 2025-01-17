@@ -9,6 +9,7 @@ Flexible playground for instrument rate model simulations and visualizations. ðŸ
 - Hydra-based configurability
 - Multiprocessed chain sampling
 - Visualizations
+- Forecasting
 
 | Solver | Status |
 | ------ | -- |
