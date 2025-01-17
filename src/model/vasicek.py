@@ -107,9 +107,10 @@ class Vasicek(IRModel):
         a = np.exp(-kappa * dt)
         sigmah2 = (Syy - 2*a*Sxy + a**2 * Sxx - 2*theta*(1-a)*(Sy - a*Sx) + N*theta**2 * (1-a)**2) / N
         sigma = np.sqrt(sigmah2*2*kappa / (1-a**2))
-        r0 = rates.iloc[N-1]
+        r0 = rates.iloc[0]
         
         self.theta = theta*kappa
         self.alpha = kappa
         self.sigma = sigma
         self.r0 = r0
+ 

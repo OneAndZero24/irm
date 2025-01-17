@@ -38,6 +38,8 @@ class DataLoader:
         
         self.data = pd.read_csv(file_path)
         self.data['Date'] = pd.to_datetime(self.data['Date'])
+        df = df.sort_values(by='Date')
+        df = df.reset_index(drop=True)
         self.date_index = self.data['Date'].to_numpy()
         self.maturity_index = np.arange(1, len(self.data.columns))
 
