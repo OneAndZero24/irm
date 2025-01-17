@@ -5,11 +5,10 @@ from omegaconf import DictConfig
 import hydra
 from hydra.utils import call
 
-from simulation import simulation
 
 @hydra.main(version_base = None, config_path = "../config", config_name = "config")
 def main(config: DictConfig):
-    simulation(config)
+    call(config.sim.run_func, config)
 
 if __name__ == "__main__":
     log = logging.getLogger(__name__)

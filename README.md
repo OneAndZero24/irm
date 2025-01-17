@@ -8,8 +8,8 @@ Flexible playground for instrument rate model simulations and visualizations. ðŸ
 ## Features
 - Hydra-based configurability
 - Multiprocessed chain sampling
-- Visualizations
-- Forecasting
+- Bond Fit/Forecasting
+- Yield Curve Fit
 
 | Solver | Status |
 | ------ | -- |

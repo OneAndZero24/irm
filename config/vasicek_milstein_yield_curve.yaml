@@ -6,7 +6,6 @@ defaults:
 
 sim:
   run_func:
-    _target_: simulation.simulation
-  bond: 240
+    _target_: yield_curve.simulation
+  date: 3/8/2024
   save_plots: False
-  forecast: 6/8/2024
