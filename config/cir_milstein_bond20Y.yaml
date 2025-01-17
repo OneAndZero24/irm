@@ -1,0 +1,12 @@
+defaults:
+  - _self_
+  - data: data_loader
+  - model: cir
+  - solver: milstein
+
+sim:
+  run_func:
+    _target_: simulation.simulation
+  bond: 240
+  save_plots: False
+  forecast: 6/8/2024

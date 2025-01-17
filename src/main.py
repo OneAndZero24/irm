@@ -1,4 +1,5 @@
 import logging
+import warnings
 
 import pyrootutils
 from omegaconf import DictConfig
@@ -11,6 +12,7 @@ def main(config: DictConfig):
     call(config.sim.run_func, config)
 
 if __name__ == "__main__":
+    warnings.filterwarnings("ignore")
     log = logging.getLogger(__name__)
     log.setLevel(logging.INFO)
     pyrootutils.setup_root(
