@@ -3,9 +3,12 @@
 
 Flexible playground for instrument rate model simulations and visualizations. 📈
 
+<p align="center"><img src="ir_plot.png" alt="Example IR Plot" width="700"/></p>
+
 ## Features
 - Hydra-based configurability
 - Multiprocessed chain sampling
+- Visualizations
 
 | Solver | Status |
 | ------ | -- |

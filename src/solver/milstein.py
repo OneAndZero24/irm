@@ -18,16 +18,15 @@ class Milstein(SDESolver):
         N (int): Number of time steps.
         num_chains (int): Number of chains.
         num_workers (int): Number of workers for parallel computation.
+        Y0 (float): starting point for chain.
 
     Methods:
         step(dt: float, dW: SDEFn, Y_prev: float) -> npt.NDArray[np.float64]:
             Perform a single Milstein step.
     """
 
-    def __init__(self, a: SDEFn, b: SDEFn, t_start: int, t_stop: int, N: int, num_chains: int, num_workers: int = 1):
-        super().__init__(t_start, t_stop, N, num_chains, num_workers)
-        self.a = a
-        self.b = b
+    def __init__(self, a: SDEFn, b: SDEFn, t_start: int, t_stop: int, num_chains: int, num_workers: int = 1, Y0: float = 0.0):
+        super().__init__(a, b, t_start, t_stop, num_chains, num_workers, Y0)
         t = sym.symbols('t')
         self.b_prime = sym.lambdify(t, sym.diff(self.b(t), t), "numpy")
 

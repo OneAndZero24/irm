@@ -21,25 +21,26 @@ class DataLoader:
             Returns the column of rates data for the given index.
     """
 
-    def __init__(self, file_path: Path):
+    def __init__(self, file_path: str):
         """
         Initializes the DataLoader instance and loads data from the given CSV file.
 
         Args:
-            file_path (Path): The path to the CSV file containing the data.
+            file_path (str): The path to the CSV file containing the data.
 
         Raises:
             FileNotFoundError: If the file does not exist.
             ValueError: If the file contains invalid data.
         """
 
+        file_path = Path(file_path)
         if not file_path.exists():
             raise FileNotFoundError(f"File not found: {file_path}")
         
         self.data = pd.read_csv(file_path)
         self.data['Date'] = pd.to_datetime(self.data['Date'])
-        df = df.sort_values(by='Date')
-        df = df.reset_index(drop=True)
+        self.data = self.data.sort_values(by='Date')
+        self.data = self.data.reset_index(drop=True)
         self.date_index = self.data['Date'].to_numpy()
         self.maturity_index = np.arange(1, len(self.data.columns))
 

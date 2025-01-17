@@ -65,6 +65,9 @@ class Vasicek(IRModel):
 
         return self.theta-self.alpha*Y_prev
 
+    def Y0(self) -> float:
+        return self.r0
+
     def b(self, Y_prev: float) -> float:
         """
         Computes the diffusion term of the Vasicek model.
@@ -75,39 +78,30 @@ class Vasicek(IRModel):
         """
 
         return self.sigma
-    
-    def Y0(self) -> float:
-        """
-        Starting point for chain.
-        """
-        
-        return self.r0
 
-    def calibrate(self, t_start: int, t_stop: int, rates: npt.NDArray[np.float64]):
+    def calibrate(self, rates: npt.NDArray[np.float64]):
         """
         MLE Vasicek calibration.
 
         Args:
-            t_start (int): Start timestep.
-            t_stop (int): Stop timestep.
             rates (npt.NDArray[np.float64]): Rates for a single instrument over time.
         """
 
         N = len(rates)
-        dt = (t_stop-t_start)/N
+        dt = 1/N
 
-        Sx = sum(rates.iloc[0:(N-1)])
-        Sy = sum(rates.iloc[1:N])
-        Sxx = np.dot(rates.iloc[0:(N-1)], rates.iloc[0:(N-1)])
-        Sxy = np.dot(rates.iloc[0:(N-1)], rates.iloc[1:N])
-        Syy = np.dot(rates.iloc[1:N], rates.iloc[1:N])
+        Sx = sum(rates[0:(N-1)])
+        Sy = sum(rates[1:N])
+        Sxx = np.dot(rates[0:(N-1)], rates[0:(N-1)])
+        Sxy = np.dot(rates[0:(N-1)], rates[1:N])
+        Syy = np.dot(rates[1:N], rates[1:N])
         
         theta = (Sy * Sxx - Sx * Sxy) / (N * (Sxx - Sxy) - (Sx**2 - Sx*Sy))
         kappa = -np.log((Sxy - theta * Sx - theta * Sy + N * theta**2) / (Sxx - 2*theta*Sx + N*theta**2)) / dt
         a = np.exp(-kappa * dt)
         sigmah2 = (Syy - 2*a*Sxy + a**2 * Sxx - 2*theta*(1-a)*(Sy - a*Sx) + N*theta**2 * (1-a)**2) / N
         sigma = np.sqrt(sigmah2*2*kappa / (1-a**2))
-        r0 = rates.iloc[0]
+        r0 = rates[0]
         
         self.theta = theta*kappa
         self.alpha = kappa

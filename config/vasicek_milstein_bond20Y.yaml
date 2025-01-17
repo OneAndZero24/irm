@@ -1,0 +1,9 @@
+defaults:
+  - _self_
+  - data: data_loader
+  - model: vasicek
+  - solver: milstein
+
+sim:
+  bond: 240
+  save_plots: True

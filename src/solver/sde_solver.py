@@ -16,6 +16,8 @@ class SDESolver(metaclass=ABCMeta):
     Abstract base class for a solver that simulates SDEs.
 
     Attributes:
+        a (SDEFn): The drift coefficient function.
+        b (SDEFn): The diffusion coefficient function.
         N (int): Number of time steps.
         num_chains (int): Number of independent chains to simulate.
         dt (float): Time step size.
@@ -30,23 +32,26 @@ class SDESolver(metaclass=ABCMeta):
             Runs the solver for the specified number of chains and time steps, returning the results as a NumPy array.
     """
 
-    def __init__(self, t_start: int, t_stop: int, N: int, num_chains: int, num_workers: int = 1, Y0: float = 0.0):
+    def __init__(self, a: SDEFn, b: SDEFn, t_start: int, t_stop: int, num_chains: int, num_workers: int = 1, Y0: float = 0.0):
         """
         Initializes the SolverBase with the given parameters.
 
         Args:
+            a (SDEFn): The drift coefficient function.
+            b (SDEFn): The diffusion coefficient function.
             t_start (int): Start time of the simulation.
             t_stop (int): Stop time of the simulation.
-            N (int): Number of time steps.
             num_chains (int): Number of independent chains to simulate.
             num_workers (int): Number of worker threads to use for parallel execution (default is 1).
             Y0 (float): starting point for chain.
         """
 
-        self.N = N
+        self.a = a
+        self.b = b
+        self.N = (t_stop-t_start)+1
         self.num_chains = num_chains
-        self.Y0 = 0
-        self.dt = (t_stop-t_start)/N
+        self.Y0 = Y0
+        self.dt = 1/self.N
         self.num_workers = num_workers
         self.dW = lambda _ : np.random.normal(loc=0.0, scale=np.sqrt(self.dt))
 

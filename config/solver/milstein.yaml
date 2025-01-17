@@ -1,0 +1,4 @@
+_partial_: True
+_target_: solver.Milstein
+num_chains: 100
+num_workers: 4
