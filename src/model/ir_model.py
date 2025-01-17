@@ -6,14 +6,14 @@ import pandas as pd
 class IRModel(metaclass=ABCMeta):
     """
     Abstract base class for an Interest Rate Model with following form:
-    dY = a(Y) dt + b(Y) dW
+    dY = a(Y, t) dt + b(Y, t) dW
 
     Methods:
-    a(t: float) -> float
-        a(Y)
+    a(Y_prev: float, t: float) -> float
+        a(Y, t)
 
-    b(t: float) -> float
-        b(Y)
+    b(Y_prev: float, t: float) -> float
+        b(Y, t)
 
     Y0() -> float
         Starting point for chain.
@@ -23,11 +23,11 @@ class IRModel(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def a(self, Y_prev: float) -> float:
+    def a(self, Y_prev: float, t: float) -> float:
         pass
 
     @abstractmethod
-    def b(self, Y_prev: float) -> float:
+    def b(self, Y_prev: float, t: float) -> float:
         pass
 
     @abstractmethod

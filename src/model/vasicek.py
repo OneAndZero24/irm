@@ -24,10 +24,10 @@ class Vasicek(IRModel):
         r0 (float): First rate.
 
     Methods:
-        a(Y_prev: float) -> float:
+        a(Y_prev: float, t:flaot) -> float:
             Computes the drift term of the Vasicek model.
 
-        b(Y_prev: float) -> float:
+        b(Y_prev: float, t: float) -> float:
             Computes the diffusion term of the Vasicek model.
 
         Y0() -> float:
@@ -54,11 +54,12 @@ class Vasicek(IRModel):
         self.sigma = sigma
         self.r0 = r0
      
-    def a(self, Y_prev: float) -> float:
+    def a(self, Y_prev: float, t: float) -> float:
         """
         Computes the drift term of the Vasicek model.
         Args:
             Y_prev (float): The previous value of the interest rate.
+            t (float): Timestep.
         Returns:
             float: The drift term.
         """
@@ -68,11 +69,12 @@ class Vasicek(IRModel):
     def Y0(self) -> float:
         return self.r0
 
-    def b(self, Y_prev: float) -> float:
+    def b(self, Y_prev: float, t: float) -> float:
         """
         Computes the diffusion term of the Vasicek model.
         Args:
             Y_prev (float): The previous value of the interest rate.
+            t (float): Timestep.
         Returns:
             float: The diffusion term.
         """

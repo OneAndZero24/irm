@@ -9,7 +9,7 @@ import numpy.typing as npt
 from tqdm import tqdm
 
 
-SDEFn: TypeAlias = Callable[[float], float]
+SDEFn: TypeAlias = Callable[[float, float], float]
 
 class SDESolver(metaclass=ABCMeta):
     """
@@ -25,7 +25,7 @@ class SDESolver(metaclass=ABCMeta):
         dW (Callable): Function to generate random increments for the Wiener process.
 
     Methods:
-        step(dt: float, dW: SDEFn, Y_prev: float) -> npt.NDArray[np.float64]:
+        step(dt: float, Y_prev: float, t: float) -> npt.NDArray[np.float64]:
             Abstract method to perform a single step of the SDE solver.
         
         run() -> npt.NDArray[np.float64]:
@@ -48,6 +48,8 @@ class SDESolver(metaclass=ABCMeta):
 
         self.a = a
         self.b = b
+        self.t_start = t_start
+        self.t_stop = t_stop
         self.N = (t_stop-t_start)+1
         self.num_chains = num_chains
         self.Y0 = Y0
@@ -59,12 +61,13 @@ class SDESolver(metaclass=ABCMeta):
         dill.settings['recurse'] = True
 
     @abstractmethod
-    def step(self, Y_prev: float) -> npt.NDArray[np.float64]:
+    def step(self, Y_prev: float, t: float) -> npt.NDArray[np.float64]:
         """
         Method to perform a single step of the SDE solver.
 
         Args:
             Y_prev (float): Previous value of the process.
+            t (float): Timestep.
 
         Returns:
             npt.NDArray[np.float64]: The new value of the process after the step.
@@ -88,8 +91,10 @@ class SDESolver(metaclass=ABCMeta):
             N = self.N
             Y = np.zeros(N)
             Y[0] = self.Y0
+            t = self.t_start
             for i in tqdm(range(1, N), desc=f"Chain {i}"):
-                Y[i] = self.step(Y[i-1])
+                Y[i] = self.step(Y[i-1], t)
+                t += self.dt
             return Y
         
         chains = range(1, self.num_chains+1)
