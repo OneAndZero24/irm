@@ -37,6 +37,9 @@ def run_sim(config: DictConfig, t_start: float, t_stop: float, y: typing.Optiona
     Helper function
     """
 
+    if (config.solver == "Milstein") and (not model.differentiable()):
+        raise RuntimeError("Milstein solver requires differentiable SDE!")
+
     log.info("Initializing solver.")
     solver = instantiate(config.solver)(
         t_start=t_start,

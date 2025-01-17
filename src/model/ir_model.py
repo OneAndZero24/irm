@@ -18,6 +18,9 @@ class IRModel(metaclass=ABCMeta):
     Y0() -> float
         Starting point for chain.
 
+    differentiable -> bool
+        Needed for Milstein.
+
     calibrate(data: pd.DataFrame)
         Abstract method to calibrate the model using the provided data.
     """
@@ -33,6 +36,11 @@ class IRModel(metaclass=ABCMeta):
     @abstractmethod
     def Y0(self) -> float:
         pass
+
+    @abstractmethod
+    def differentiable(self) -> bool:
+        pass
+
 
     @abstractmethod
     def calibrate(self, data: pd.DataFrame):

@@ -39,4 +39,4 @@ def simulation(config: DictConfig):
         N = len(days)-1
         if N > 0:
             log.info('Forecasting.')
-            run_sim(config, t_stop, t_stop+N, None, days, model, rates[-1])
+            run_sim(config, 0, N, None, days, model, rates[-1])

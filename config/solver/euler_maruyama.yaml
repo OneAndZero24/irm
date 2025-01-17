@@ -1,4 +1,4 @@
 _partial_: True
-_target_: solver.Euler_Maruyama
+_target_: solver.EulerMaruyama
 num_chains: 100
 num_workers: 4

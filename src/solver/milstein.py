@@ -1,6 +1,7 @@
 import numpy as np
 import numpy.typing as npt
 import sympy as sym
+from sympy.abc import x, y
 
 from .sde_solver import SDESolver, SDEFn
 
@@ -27,8 +28,8 @@ class Milstein(SDESolver):
 
     def __init__(self, a: SDEFn, b: SDEFn, t_start: int, t_stop: int, num_chains: int, num_workers: int = 1, Y0: float = 0.0):
         super().__init__(a, b, t_start, t_stop, num_chains, num_workers, Y0)
-        x, y = sym.symbols('x, y')
-        self.b_prime = sym.lambdify((x, y), sym.diff(self.b(x, y), x), "numpy")
+        b_prime = sym.diff(self.b(x, y), x)
+        self.b_prime = sym.lambdify([x, y], b_prime, "numpy")
 
     def step(self, Y_prev: float, t: float) -> npt.NDArray[np.float64]:
         dt = self.dt

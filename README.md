@@ -24,7 +24,7 @@ Flexible playground for instrument rate model simulations and visualizations. �
 | Ho-Lee | ❌ |
 | Hull-White | ❌ |
 | BDT | ❌ |
-| BK | ❌ |
+| BK | ✅ |
 
 ## Commands
 **Setup**

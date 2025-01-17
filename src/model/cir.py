@@ -55,6 +55,9 @@ class CIR(IRModel):
 
         return self.r0
 
+    def differentiable(self) -> bool:
+        return True
+
     def b(self, Y_prev: float, t: float) -> float:
         """
         Computes the diffusion term of the CIR model.
@@ -64,7 +67,7 @@ class CIR(IRModel):
 
     def calibrate(self, rates: npt.NDArray[np.float64]):
         """
-        Calibrates the CIR model parameters using historical interest rate data.
+        Calibrates the CIR model parameters using historical interest rate data via Linear Regression.
         """
 
         N = len(rates)

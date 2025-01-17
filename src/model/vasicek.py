@@ -69,6 +69,9 @@ class Vasicek(IRModel):
     def Y0(self) -> float:
         return self.r0
 
+    def differentiable(self) -> bool:
+        return True
+
     def b(self, Y_prev: float, t: float) -> float:
         """
         Computes the diffusion term of the Vasicek model.
